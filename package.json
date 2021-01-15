@@ -1,0 +1,29 @@
+{
+  "name": "twitter-beermoney_bot",
+  "version": "1.0.0",
+  "description": "twitter bot",
+  "main": "app.js",
+  "type": "module",
+  "dependencies": {
+    "config": "^3.3.3",
+    "promise-mysql": "^5.0.1",
+    "twitter-api-client": "^1.2.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/franklinzerocr/twitter-beermoney_bot.git"
+  },
+  "keywords": [
+    "twitter"
+  ],
+  "author": "franklinzerocr",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/franklinzerocr/twitter-beermoney_bot/issues"
+  },
+  "homepage": "https://github.com/franklinzerocr/twitter-beermoney_bot#readme"
+}

@@ -1,0 +1,15 @@
+{
+  "DB": {
+    "Host": "localhost",
+    "User": "root",
+    "Password": "",
+    "DatabaseName": "beermoney_io"
+  }, 
+  "keys": {
+    "apiKey": "",
+    "apiSecret": "",
+    "bearer": "",
+    "accessToken": "",
+    "accessTokenSecret": ""
+  } 
+}
