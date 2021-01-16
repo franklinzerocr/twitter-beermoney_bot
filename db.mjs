@@ -17,7 +17,8 @@ export function connection(database) {
 
 export async function getNewlyCreatedFloors(dbConnection) {
   try {
-    let timeCondition = '(UNIX_TIMESTAMP(CURRENT_TIME())-UNIX_TIMESTAMP(f.DateTime))/60 <1440'; //1 Minute old
+    // DELAY DE 30 MINUTOS
+    let timeCondition = '(UNIX_TIMESTAMP(CURRENT_TIME())-UNIX_TIMESTAMP(f.DateTime))/60 <31 AND (UNIX_TIMESTAMP(CURRENT_TIME())-UNIX_TIMESTAMP(f.DateTime))/60 >30';
 
     let result = await dbConnection.query('SELECT * FROM floor f WHERE (Level=0 OR Level=-2) AND TweetID is Null AND OrderID>0 AND ' + timeCondition);
     return result;
