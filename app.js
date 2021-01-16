@@ -13,19 +13,19 @@ function sleep(ms) {
   let dbConnection = await connection(config.DB);
   let floor = [];
   let count = 0;
-  let horas = 0;
 
   let tweet = '';
   let status = {};
 
-  while (1 == 1) {
+  let timerId = setTimeout(async function tick() {
     count++;
-    if (count % 3600 == 0) console.log(horas + count / 3600, ' horas');
 
-    if (count >= 21600) {
-      tweet = 'Los Tweets publicados son para llevar documentación, no son una asesoría de inversión 🍺.\n\n*Las operaciones mostradas tienen 30min de retraso, como se puede observar en el github de este BOT\nhttps://github.com/franklinzerocr/twitter-beermoney_bot';
+    // console.log(count);
+
+    // Cada 20 horas
+    if (count >= 72000) {
+      tweet = 'Los Tweets publicados son para llevar documentación, no son una asesoría de inversión 🍺\n\n*Las operaciones mostradas tienen 1hr de retraso, como se puede observar en el github de este BOT\nhttps://github.com/franklinzerocr/twitter-beermoney_bot';
       status = await twitter.tweets.statusesUpdate({ status: tweet });
-      horas += 6;
       count = 0;
     }
 
@@ -66,8 +66,9 @@ function sleep(ms) {
 
       updateTweetFloor(dbConnection, floor.ID, status.id_str);
     }
-    await sleep(1000);
-  }
+
+    timerId = setTimeout(tick, 1000);
+  }, 0);
 
   // console.log('Timeline');
   // let data = await twitter.tweets.statusesUserTimeline({ screen_name: 'Beermoney_Bot' });
