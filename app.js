@@ -20,11 +20,9 @@ function sleep(ms) {
   let timerId = setTimeout(async function tick() {
     count++;
 
-    // console.log(count);
-
-    // Cada 20 horas
+    // Cada 20 horas tuiteo disclaimer
     if (count >= 72000) {
-      tweet = 'Los Tweets publicados son para llevar documentación, no son una asesoría de inversión 🍺\n\n*Las operaciones mostradas tienen 1hr de retraso, como se puede observar en el github de este BOT\nhttps://github.com/franklinzerocr/twitter-beermoney_bot';
+      tweet = 'Los Tweets publicados son para llevar documentación, no son una asesoría de inversión 🍺\n\n*Las operaciones se muestran con 1hr de retraso, como se puede observar en el github público de este TwitterBOT\nhttps://github.com/franklinzerocr/twitter-beermoney_bot';
       status = await twitter.tweets.statusesUpdate({ status: tweet });
       count = 0;
     }
@@ -36,27 +34,28 @@ function sleep(ms) {
       tweet = '';
       status = {};
 
-      // ENTRADA
+      // ENTRY
       if (floor.Level == 0) {
-        tweet += 'Par: $' + floor.Asset + ' / #BTC\n';
-        tweet += 'Precio de Entrada: ' + floor.Price + ' sats 🍺\n\n';
-        tweet += '#AlgorithmicTrading #TradingPlan' + floor.FK_Trading_Plan + '\n\n';
+        tweet += '#TradingPlan' + floor.Asset + ' START 🏁\n\n';
+        tweet += '$' + floor.Asset + ' / #BTC\n';
+        tweet += 'Entry Buy Price: ' + floor.Price + ' sats \n\n';
         tweet += 'https://www.binance.com/es/trade/' + floor.Asset + '_BTC';
         status = await twitter.tweets.statusesUpdate({ status: tweet });
-        //SALIDA
+        //EXIT
       } else {
-        tweet += 'Par: $' + floor.Asset + ' / #BTC\n';
-        tweet += 'Precio de Salida: ' + floor.Price + ' sats\n';
-
+        // PROFIT
         if (floor.Profit > 0) {
-          tweet += 'Ganancia: ' + floor.Profit + '% ';
-          tweet += '😎🍻\n\n';
-          tweet += '#AlgorithmicTrading #TradingPlan' + floor.FK_Trading_Plan + '\n\n';
+          tweet += '#TradingPlan' + floor.Asset + ' END 😎🍺\n\n';
+          tweet += '$' + floor.Asset + ' / #BTC\n';
+          tweet += 'Exit Sell Price: ' + floor.Price + ' sats\n';
+          tweet += 'Profit: ' + floor.Profit + '%\n\n';
           tweet += 'https://www.binance.com/es/trade/' + floor.Asset + '_BTC';
+          // LOSS
         } else {
-          tweet += 'Perdida: ' + floor.Profit + '% ';
-          tweet += '😥\n\n';
-          tweet += '#AlgorithmicTrading #TradingPlan' + floor.FK_Trading_Plan + '\n\n';
+          tweet += '#TradingPlan' + floor.Asset + ' END 😢💸\n\n';
+          tweet += '$' + floor.Asset + ' / #BTC\n';
+          tweet += 'Exit Sell Price: ' + floor.Price + ' sats\n';
+          tweet += 'Loss: ' + floor.Profit + '%\n\n';
           tweet += 'https://www.binance.com/es/trade/' + floor.Asset + '_BTC';
         }
 
