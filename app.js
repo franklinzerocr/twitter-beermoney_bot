@@ -39,24 +39,24 @@ function sleep(ms) {
         tweet += '#TradingPlan' + floor.Asset + ' START 🏁\n\n';
         tweet += '$' + floor.Asset + ' / #BTC\n';
         tweet += 'Entry Buy Price: ' + floor.Price + ' sats \n\n';
-        tweet += 'https://www.binance.com/es/trade/' + floor.Asset + '_BTC';
+        tweet += 'https://www.binance.com/en/trade/' + floor.Asset + '_BTC';
         status = await twitter.tweets.statusesUpdate({ status: tweet });
         //EXIT
       } else {
         // PROFIT
         if (floor.Profit > 0) {
-          tweet += '#TradingPlan' + floor.Asset + ' END 😎🍺\n\n';
+          tweet += 'END 😎🍺\n\n';
           tweet += '$' + floor.Asset + ' / #BTC\n';
           tweet += 'Exit Sell Price: ' + floor.Price + ' sats\n';
           tweet += 'Profit: ' + floor.Profit + '%\n\n';
-          tweet += 'https://www.binance.com/es/trade/' + floor.Asset + '_BTC';
+          tweet += '#AlgorithmicTrading https://www.binance.com/en/trade/' + floor.Asset + '_BTC';
           // LOSS
         } else {
-          tweet += '#TradingPlan' + floor.Asset + ' END 😢💸\n\n';
+          tweet += 'END 😢💸\n\n';
           tweet += '$' + floor.Asset + ' / #BTC\n';
           tweet += 'Exit Sell Price: ' + floor.Price + ' sats\n';
           tweet += 'Loss: ' + floor.Profit + '%\n\n';
-          tweet += 'https://www.binance.com/es/trade/' + floor.Asset + '_BTC';
+          tweet += '#AlgorithmicTrading https://www.binance.com/en/trade/' + floor.Asset + '_BTC';
         }
 
         let initialFloor = await getInitialFloor(dbConnection, floor.FK_Trading_Plan);
