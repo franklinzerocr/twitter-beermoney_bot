@@ -12,7 +12,7 @@ function sleep(ms) {
   const twitter = twitterClient(config.keys);
   let dbConnection = await connection(config.DB);
   let floor = [];
-  let count = 70000;
+  let count = 0;
 
   let tweet = '';
   let status = {};
@@ -20,8 +20,8 @@ function sleep(ms) {
   let timerId = setTimeout(async function tick() {
     count++;
 
-    // Cada 20 horas tuiteo disclaimer
-    if (count >= 72000) {
+    // Cada 40 horas tuiteo disclaimer
+    if (count >= 144000) {
       tweet = 'Los Tweets publicados son para llevar documentación, no son una asesoría de inversión 🍺\n\n*Las operaciones se muestran con 1hr de retraso, como se puede observar en el github público de este TwitterBOT\nhttps://github.com/franklinzerocr/twitter-beermoney_bot';
       status = await twitter.tweets.statusesUpdate({ status: tweet });
       count = 0;
@@ -45,17 +45,17 @@ function sleep(ms) {
       } else {
         // PROFIT
         if (floor.Profit > 0) {
-          tweet += 'END 😎🍺\n\n';
+          tweet += '#TradingPlan' + floor.FK_Trading_Plan + ' END\n\n';
           tweet += '$' + floor.Asset + ' / #BTC\n';
           tweet += 'Exit Sell Price: ' + floor.Price + ' sats\n';
-          tweet += 'Profit: ' + floor.Profit + '%\n\n';
+          tweet += 'Profit: ' + floor.Profit + '% 😎🍺\n\n';
           tweet += '#AlgorithmicTrading https://www.binance.com/en/trade/' + floor.Asset + '_BTC';
           // LOSS
         } else {
-          tweet += 'END 😢💸\n\n';
+          tweet += 'END\n\n';
           tweet += '$' + floor.Asset + ' / #BTC\n';
           tweet += 'Exit Sell Price: ' + floor.Price + ' sats\n';
-          tweet += 'Loss: ' + floor.Profit + '%\n\n';
+          tweet += 'Loss: ' + floor.Profit + '% 😢💸\n\n';
           tweet += '#AlgorithmicTrading https://www.binance.com/en/trade/' + floor.Asset + '_BTC';
         }
 
