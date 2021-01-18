@@ -12,7 +12,7 @@ function sleep(ms) {
   const twitter = twitterClient(config.keys);
   let dbConnection = await connection(config.DB);
   let floor = [];
-  let count = 0;
+  let count = 70000;
 
   let tweet = '';
   let status = {};
@@ -36,7 +36,7 @@ function sleep(ms) {
 
       // ENTRY
       if (floor.Level == 0) {
-        tweet += '#TradingPlan' + floor.Asset + ' START 🏁\n\n';
+        tweet += '#TradingPlan' + floor.FK_Trading_Plan + ' START 🏁\n\n';
         tweet += '$' + floor.Asset + ' / #BTC\n';
         tweet += 'Entry Buy Price: ' + floor.Price + ' sats \n\n';
         tweet += 'https://www.binance.com/en/trade/' + floor.Asset + '_BTC';
