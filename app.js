@@ -12,7 +12,7 @@ function sleep(ms) {
   const twitter = twitterClient(config.keys);
   let dbConnection = await connection(config.DB);
   let floor = [];
-  let count = 0;
+  let count = 90000;
 
   let tweet = '';
   let status = {};
@@ -22,7 +22,7 @@ function sleep(ms) {
 
     // Cada 40 horas tuiteo disclaimer
     if (count >= 144000) {
-      tweet = 'Los Tweets publicados son para llevar documentación, no son una asesoría de inversión 🍺\n\n*Las operaciones se muestran con 1hr de retraso, como se puede observar en el github público de este TwitterBOT\nhttps://github.com/franklinzerocr/twitter-beermoney_bot';
+      tweet = 'Los Tweets publicados son para llevar documentación histórica comprobable, no son una asesoría de inversión 🍺\nhttps://github.com/franklinzerocr/twitter-beermoney_bot';
       status = await twitter.tweets.statusesUpdate({ status: tweet });
       count = 0;
     }
@@ -37,7 +37,7 @@ function sleep(ms) {
       // ENTRY
       if (floor.Level == 0) {
         tweet += '#TradingPlan' + floor.FK_Trading_Plan + ' START 🏁\n\n';
-        tweet += '$' + floor.Asset + ' / #BTC\n';
+        tweet += floor.Asset + ' / #BTC\n';
         tweet += 'Entry Buy Price: ' + floor.Price + ' sats \n\n';
         tweet += 'https://www.binance.com/en/trade/' + floor.Asset + '_BTC';
         status = await twitter.tweets.statusesUpdate({ status: tweet });
@@ -46,17 +46,17 @@ function sleep(ms) {
         // PROFIT
         if (floor.Profit > 0) {
           tweet += '#TradingPlan' + floor.FK_Trading_Plan + ' END\n\n';
-          tweet += '$' + floor.Asset + ' / #BTC\n';
+          tweet += floor.Asset + ' / #BTC\n';
           tweet += 'Exit Sell Price: ' + floor.Price + ' sats\n';
           tweet += 'Profit: ' + floor.Profit + '% 😎🍺\n\n';
-          tweet += '#AlgorithmicTrading https://www.binance.com/en/trade/' + floor.Asset + '_BTC';
+          tweet += '#AlgorithmicTrading\nhttps://www.binance.com/en/trade/' + floor.Asset + '_BTC';
           // LOSS
         } else {
-          tweet += 'END\n\n';
-          tweet += '$' + floor.Asset + ' / #BTC\n';
+          tweet += '#TradingPlan' + floor.FK_Trading_Plan + ' END\n\n';
+          tweet += floor.Asset + ' / #BTC\n';
           tweet += 'Exit Sell Price: ' + floor.Price + ' sats\n';
           tweet += 'Loss: ' + floor.Profit + '% 😢💸\n\n';
-          tweet += '#AlgorithmicTrading https://www.binance.com/en/trade/' + floor.Asset + '_BTC';
+          tweet += '#AlgorithmicTrading\nhttps://www.binance.com/en/trade/' + floor.Asset + '_BTC';
         }
 
         let initialFloor = await getInitialFloor(dbConnection, floor.FK_Trading_Plan);
