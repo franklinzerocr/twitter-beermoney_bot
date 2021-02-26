@@ -12,7 +12,7 @@ function sleep(ms) {
   const twitter = twitterClient(config.keys);
   let dbConnection = await connection(config.DB);
   let floor = [];
-  let count = 90000;
+  let count = 0;
 
   let tweet = '';
   let status = {};
@@ -21,13 +21,14 @@ function sleep(ms) {
     count++;
 
     // Cada 40 horas tuiteo disclaimer
-    if (count >= 144000) {
+    if (count >= 144444) {
       tweet = 'Los Tweets publicados son para llevar documentación histórica comprobable, no son una asesoría de inversión 🍺\nhttps://github.com/franklinzerocr/twitter-beermoney_bot';
       status = await twitter.tweets.statusesUpdate({ status: tweet });
       count = 0;
     }
 
     floor = await getNewlyCreatedFloors(dbConnection);
+
     if (floor.length) {
       floor = floor[0];
 
@@ -39,7 +40,7 @@ function sleep(ms) {
         tweet += '#TradingPlan' + floor.FK_Trading_Plan + ' START 🏁\n\n';
         tweet += floor.Asset + ' / #BTC\n';
         tweet += 'Entry Buy Price: ' + floor.Price + ' sats \n\n';
-        tweet += 'https://www.binance.com/en/trade/' + floor.Asset + '_BTC';
+        tweet += '#AlgoTrade\nhttps://www.binance.com/en/trade/' + floor.Asset + '_BTC';
         status = await twitter.tweets.statusesUpdate({ status: tweet });
         //EXIT
       } else {
@@ -49,14 +50,14 @@ function sleep(ms) {
           tweet += floor.Asset + ' / #BTC\n';
           tweet += 'Exit Sell Price: ' + floor.Price + ' sats\n';
           tweet += 'Profit: ' + floor.Profit + '% 😎🍺\n\n';
-          tweet += '#AlgorithmicTrading\nhttps://www.binance.com/en/trade/' + floor.Asset + '_BTC';
+          tweet += '#AlgoTrade\nhttps://www.binance.com/en/trade/' + floor.Asset + '_BTC';
           // LOSS
         } else {
           tweet += '#TradingPlan' + floor.FK_Trading_Plan + ' END\n\n';
           tweet += floor.Asset + ' / #BTC\n';
           tweet += 'Exit Sell Price: ' + floor.Price + ' sats\n';
           tweet += 'Loss: ' + floor.Profit + '% 😢💸\n\n';
-          tweet += '#AlgorithmicTrading\nhttps://www.binance.com/en/trade/' + floor.Asset + '_BTC';
+          tweet += '#AlgoTrade\nhttps://www.binance.com/en/trade/' + floor.Asset + '_BTC';
         }
 
         let initialFloor = await getInitialFloor(dbConnection, floor.FK_Trading_Plan);
@@ -68,21 +69,4 @@ function sleep(ms) {
 
     timerId = setTimeout(tick, 1000);
   }, 0);
-
-  // console.log('Timeline');
-  // let data = await twitter.tweets.statusesUserTimeline({ screen_name: 'Beermoney_Bot' });
-
-  // console.log('Get By ID');
-  // let data = await twitter.tweets.statusesShowById({ id: '1349951366161199104' });
-
-  // let tweet = 'hola';
-  // let status = await twitter.tweets.statusesUpdate({ status: tweet, in_reply_to_status_id: '1349951366161199104' });
-
-  // console.log(status);
-
-  // for (let tweet of data) {
-  //   console.log(tweet.text);
-  //   console.log(tweet.id_str);
-  //   console.log('----');
-  // }
 })();
