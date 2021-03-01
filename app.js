@@ -16,12 +16,13 @@ function sleep(ms) {
 
   let tweet = '';
   let status = {};
+  console.log('Start Twitter Beermoney BOT!');
 
   let timerId = setTimeout(async function tick() {
     count++;
 
     // Cada 40 horas tuiteo disclaimer
-    if (count >= 144444) {
+    if (count >= 288000) {
       tweet = 'Los Tweets publicados son para llevar documentación histórica comprobable, no son una asesoría de inversión 🍺\nhttps://github.com/franklinzerocr/twitter-beermoney_bot';
       status = await twitter.tweets.statusesUpdate({ status: tweet });
       count = 0;
