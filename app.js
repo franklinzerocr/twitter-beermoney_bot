@@ -3,7 +3,7 @@ import { connection, getNewlyCreatedFloors, updateTweetFloor, getInitialFloor } 
 import { twitterClient } from './api.mjs';
 
 function sleep(ms) {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
@@ -45,17 +45,15 @@ function sleep(ms) {
         //EXIT
       } else {
         // PROFIT
-        if (floor.Profit > 0) {
+        if (floor.Profit >= 0) {
           tweet += '#TradingPlan' + floor.FK_Trading_Plan + ' END\n\n';
           tweet += floor.Asset + ' / #BTC\n';
-          tweet += 'Exit Sell Price: ' + floor.Price + ' sats\n';
           tweet += 'Profit: ' + floor.Profit + '% 😎🍺\n\n';
           tweet += '#AlgoTrade';
           // LOSS
         } else {
           tweet += '#TradingPlan' + floor.FK_Trading_Plan + ' END\n\n';
           tweet += floor.Asset + ' / #BTC\n';
-          tweet += 'Exit Sell Price: ' + floor.Price + ' sats\n';
           tweet += 'Loss: ' + floor.Profit + '% 😢💸\n\n';
           tweet += '#AlgoTrade';
         }
