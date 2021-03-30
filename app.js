@@ -17,6 +17,7 @@ function sleep(ms) {
   let tweet = '';
   let status = {};
   console.log('Start Twitter Beermoney BOT!');
+  console.log(new Date());
 
   let timerId = setTimeout(async function tick() {
     count++;
