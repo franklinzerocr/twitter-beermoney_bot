@@ -6,6 +6,7 @@
   "type": "module",
   "dependencies": {
     "config": "^3.3.3",
+    "node-binance-api": "^0.12.5",
     "promise-mysql": "^5.0.1",
     "twitter-api-client": "^1.2.4"
   },

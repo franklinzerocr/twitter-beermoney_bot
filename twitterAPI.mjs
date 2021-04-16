@@ -8,3 +8,7 @@ export function twitterClient(keys) {
     accessTokenSecret: keys.accessTokenSecret,
   });
 }
+
+export async function tweet(twitter, message, TweetID = null) {
+  return TweetID == null ? await twitter.tweets.statusesUpdate({ status: message }) : await twitter.tweets.statusesUpdate({ status: message, in_reply_to_status_id: TweetID });
+}

@@ -19,9 +19,9 @@ export async function getNewlyCreatedFloors(dbConnection) {
   try {
     // Delay conditions
     let timeConditionEntry = '(UNIX_TIMESTAMP(CURRENT_TIME())-UNIX_TIMESTAMP(f.DateTime))/60 <1 AND (UNIX_TIMESTAMP(CURRENT_TIME())-UNIX_TIMESTAMP(f.DateTime))/60 >=0';
-    let timeConditionEnd = '(UNIX_TIMESTAMP(CURRENT_TIME())-UNIX_TIMESTAMP(f.DateTime))/60 <31 AND (UNIX_TIMESTAMP(CURRENT_TIME())-UNIX_TIMESTAMP(f.DateTime))/60 >=30';
+    let timeConditionEnd = '(UNIX_TIMESTAMP(CURRENT_TIME())-UNIX_TIMESTAMP(f.DateTime))/60 <(f.RandomMinutes+1) AND (UNIX_TIMESTAMP(CURRENT_TIME())-UNIX_TIMESTAMP(f.DateTime))/60 >=f.RandomMinutes';
 
-    let result = await dbConnection.query('SELECT * FROM floor f WHERE DateTime IS NOT NULL AND ((Level=0 AND ' + timeConditionEntry + ') OR (Level=-2 AND ' + timeConditionEnd + ' )) AND TweetID is Null AND OrderID>0 ');
+    let result = await dbConnection.query('SELECT * FROM floor f WHERE DateTime IS NOT NULL AND ((Level=0 AND ' + timeConditionEntry + ') OR (Level=-2 AND ' + timeConditionEnd + ' )) AND TweetID is Null AND OrderID<>0 ');
     return result;
   } catch (e) {
     console.log(e);
@@ -41,10 +41,22 @@ export async function getInitialFloor(dbConnection, tradingPlanID) {
     return false;
   }
 }
+export async function getFloor(dbConnection, floor) {
+  try {
+    let result = await dbConnection.query('SELECT * FROM floor f WHERE ID=' + floor.ID);
+
+    return result[0];
+  } catch (e) {
+    console.log(e);
+    console.log('getInitialFloor Error');
+    return false;
+  }
+}
 
 export async function updateTweetFloor(dbConnection, id, tweetID) {
   try {
-    let result = await dbConnection.query('UPDATE floor SET TweetID=' + tweetID + '  WHERE ID=' + id);
+    let random = Math.floor(Math.random() * 90) + 30;
+    let result = await dbConnection.query('UPDATE floor SET TweetID=' + tweetID + ', RandomMinutes=' + random + '  WHERE ID=' + id);
 
     return result;
   } catch (e) {

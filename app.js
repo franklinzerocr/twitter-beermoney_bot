@@ -1,6 +1,7 @@
 import config from 'config';
 import { connection, getNewlyCreatedFloors, updateTweetFloor, getInitialFloor } from './db.mjs';
-import { twitterClient } from './api.mjs';
+import { twitterClient, tweet } from './twitterAPI.mjs';
+import { binanceAPI, tweetTopPrice } from './binanceAPI.mjs';
 
 function sleep(ms) {
   return new Promise((resolve) => {
@@ -11,10 +12,11 @@ function sleep(ms) {
 (async function () {
   const twitter = twitterClient(config.keys);
   let dbConnection = await connection(config.DB);
+
   let floor = [];
   let count = 0;
 
-  let tweet = '';
+  let tweetMessage = '';
   let status = {};
   console.log('Start Twitter Beermoney BOT!');
   console.log(new Date());
@@ -33,39 +35,28 @@ function sleep(ms) {
     if (floor.length) {
       floor = floor[0];
 
-      tweet = '';
+      tweetMessage = '';
       status = {};
 
       // ENTRY
       if (floor.Level == 0) {
-        tweet += '#TradingPlan' + floor.FK_Trading_Plan + ' START 🏁\n\n';
-        tweet += floor.Asset + ' / #BTC\n';
-        tweet += 'Entry Buy Price: ' + floor.Price + ' sats \n\n';
-        tweet += '#AlgoTrade';
-        status = await twitter.tweets.statusesUpdate({ status: tweet });
+        tweetMessage += '#TradingPlan' + floor.FK_Trading_Plan + ' START 🏁\n\n';
+        tweetMessage += floor.Asset + ' / #BTC\n';
+        tweetMessage += 'Entry Buy Price: ' + floor.Price + ' sats \n\n';
+        tweetMessage += '#AlgoTrade';
+        status = await tweet(twitter, tweetMessage);
+        updateTweetFloor(dbConnection, floor.ID, status.id_str);
+
         //EXIT
       } else {
         // PROFIT
-        if (floor.Profit >= 0) {
-          tweet += '#TradingPlan' + floor.FK_Trading_Plan + ' END\n\n';
-          tweet += floor.Asset + ' / #BTC\n';
-          tweet += 'Profit: ' + floor.Profit + '% 😎🍺\n\n';
-          tweet += '#AlgoTrade';
-          // LOSS
-        } else {
-          tweet += '#TradingPlan' + floor.FK_Trading_Plan + ' END\n\n';
-          tweet += floor.Asset + ' / #BTC\n';
-          tweet += 'Loss: ' + floor.Profit + '% 😢💸\n\n';
-          tweet += '#AlgoTrade';
-        }
-
         let initialFloor = await getInitialFloor(dbConnection, floor.FK_Trading_Plan);
-        status = await twitter.tweets.statusesUpdate({ status: tweet, in_reply_to_status_id: initialFloor.TweetID });
+        let binance = await binanceAPI(config.binance);
+        await tweetTopPrice(dbConnection, twitter, binance, floor, initialFloor, tweet, updateTweetFloor);
+        // LOSS
       }
-
-      updateTweetFloor(dbConnection, floor.ID, status.id_str);
     }
 
-    timerId = setTimeout(tick, 1000);
+    timerId = setTimeout(tick, 100);
   }, 0);
 })();
