@@ -25,8 +25,9 @@ function sleep(ms) {
     count++;
 
     if (count >= 400000) {
-      tweet = 'Published Tweets are only to carry verifiable historical documentation, they are not investment advice 🍺\nhttps://github.com/franklinzerocr/twitter-beermoney_bot';
-      status = await twitter.tweets.statusesUpdate({ status: tweet });
+      tweetMessage = 'Follow the Telegram Channel to earn some Beer Money 🍺\nhttps://t.me/BeermoneySignals';
+      status = await tweet(twitter, tweetMessage);
+
       count = 0;
     }
 
@@ -49,14 +50,12 @@ function sleep(ms) {
 
         //EXIT
       } else {
-        // PROFIT
         let initialFloor = await getInitialFloor(dbConnection, floor.FK_Trading_Plan);
         let binance = await binanceAPI(config.binance);
         await tweetTopPrice(dbConnection, twitter, binance, floor, initialFloor, tweet, updateTweetFloor);
-        // LOSS
       }
     }
 
-    timerId = setTimeout(tick, 100);
+    timerId = setTimeout(tick, 1000);
   }, 0);
 })();

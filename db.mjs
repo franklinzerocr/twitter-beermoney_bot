@@ -55,7 +55,7 @@ export async function getFloor(dbConnection, floor) {
 
 export async function updateTweetFloor(dbConnection, id, tweetID) {
   try {
-    let random = Math.floor(Math.random() * 90) + 30;
+    let random = Math.floor(Math.random() * 300) + 60;
     let result = await dbConnection.query('UPDATE floor SET TweetID=' + tweetID + ', RandomMinutes=' + random + '  WHERE ID=' + id);
 
     return result;
