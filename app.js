@@ -24,8 +24,8 @@ function sleep(ms) {
   let timerId = setTimeout(async function tick() {
     count++;
 
-    if (count >= 400000) {
-      tweetMessage = 'Follow the Telegram Channel to earn some Beer Money 🍺\nhttps://t.me/BeermoneySignals';
+    if (count >= 100000) {
+      tweetMessage = 'Follow the Telegram Channel and earn some BeerMoney🍺 #trading #signals \nhttps://t.me/BeermoneySignals';
       status = await tweet(twitter, tweetMessage);
 
       count = 0;
@@ -46,7 +46,7 @@ function sleep(ms) {
         tweetMessage += 'Entry Buy Price: ' + floor.Price + ' sats \n\n';
         tweetMessage += '#AlgoTrade';
         status = await tweet(twitter, tweetMessage);
-        updateTweetFloor(dbConnection, floor.ID, status.id_str);
+        updateTweetFloor(dbConnection, floor.ID, status.id_str, 1);
 
         //EXIT
       } else {

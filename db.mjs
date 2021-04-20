@@ -53,10 +53,15 @@ export async function getFloor(dbConnection, floor) {
   }
 }
 
-export async function updateTweetFloor(dbConnection, id, tweetID) {
+export async function updateTweetFloor(dbConnection, id, tweetID, initialFloor = 0) {
   try {
-    let random = Math.floor(Math.random() * 300) + 60;
-    let result = await dbConnection.query('UPDATE floor SET TweetID=' + tweetID + ', RandomMinutes=' + random + '  WHERE ID=' + id);
+    let result = null;
+    if (initialFloor) {
+      let random = Math.floor(Math.random() * 300) + 60;
+      result = await dbConnection.query('UPDATE floor SET TweetID=' + tweetID + ', RandomMinutes=' + random + '  WHERE ID=' + id);
+    } else {
+      result = await dbConnection.query('UPDATE floor SET TweetID=' + tweetID + '  WHERE ID=' + id);
+    }
 
     return result;
   } catch (e) {
