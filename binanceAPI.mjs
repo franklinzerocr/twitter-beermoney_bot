@@ -25,14 +25,15 @@ export async function tweetTopPrice(dbConnection, twitter, binanceAPI, floor, in
         highestPrice = highestPrice < high ? high : highestPrice;
       }
 
-      highestPrice = (highestPrice * 100000000).toFixed(0);
+      let auxHighestPrice = floor.Pair == 'BTC' ? (highestPrice * 100000000).toFixed(0) : highestPrice;
 
-      let profit = ((highestPrice * 100) / initialFloor.Price - 100).toFixed(2);
+      let profit = ((auxHighestPrice * 100) / initialFloor.Price - 100).toFixed(2);
 
-      let tweetMessage = floor.Asset + ' / #BTC\n';
-      tweetMessage += 'Top Price: ' + highestPrice + '\n';
-      tweetMessage += 'Profit so far: ' + profit + '% 😎🍺\n\n';
-      tweetMessage += '#AlgoTrade';
+      let message = '#TradingPlan' + floor.FK_Trading_Plan;
+      message += floor.Asset + ' / #' + floor.Pair + '\n';
+      message += 'Top Price: ' + highestPrice + '\n';
+      message += 'Profit so far: ' + profit + '% 😎🍺\n\n';
+      message += '#AlgoTrade';
 
       floor = await getFloor(dbConnection, floor);
       if (floor.TweetID == null) {

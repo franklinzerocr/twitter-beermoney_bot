@@ -24,8 +24,8 @@ function sleep(ms) {
   let timerId = setTimeout(async function tick() {
     count++;
 
-    if (count >= 100000) {
-      tweetMessage = 'Follow the Telegram Channel and earn some BeerMoney🍺 #trading #signals \nhttps://t.me/BeermoneySignals';
+    if (count >= 222222) {
+      tweetMessage = 'Follow the Telegram Channel 🍺 #trading #signals #AlgorithmicTrading \nhttps://t.me/BeermoneySignals';
       status = await tweet(twitter, tweetMessage);
 
       count = 0;
@@ -39,11 +39,13 @@ function sleep(ms) {
       tweetMessage = '';
       status = {};
 
+      floor.Price = floor.Pair == 'BTC' ? util.satoshiToBTC(floor.Price) : floor.Price;
+
       // ENTRY
       if (floor.Level == 0) {
         tweetMessage += '#TradingPlan' + floor.FK_Trading_Plan + ' START 🏁\n\n';
         tweetMessage += floor.Asset + ' / #BTC\n';
-        tweetMessage += 'Entry Buy Price: ' + floor.Price + ' sats \n\n';
+        tweetMessage += 'Entry Buy Price: ' + floor.Price + ' ' + floor.Pair + '\n\n';
         tweetMessage += '#AlgoTrade';
         status = await tweet(twitter, tweetMessage);
         updateTweetFloor(dbConnection, floor.ID, status.id_str, 1);
