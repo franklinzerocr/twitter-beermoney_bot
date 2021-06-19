@@ -9,6 +9,13 @@ function sleep(ms) {
   });
 }
 
+function satoshiToBTC(satoshi) {
+  satoshi = satoshi / 100000000;
+  satoshi = Number(satoshi.toFixed(8));
+  satoshi = satoshi.noExponents();
+  return satoshi;
+}
+
 (async function () {
   const twitter = twitterClient(config.keys);
   let dbConnection = await connection(config.DB);
@@ -39,7 +46,7 @@ function sleep(ms) {
       tweetMessage = '';
       status = {};
 
-      floor.Price = floor.Pair == 'BTC' ? util.satoshiToBTC(floor.Price) : floor.Price;
+      floor.Price = floor.Pair == 'BTC' ? satoshiToBTC(floor.Price) : floor.Price;
 
       // ENTRY
       if (floor.Level == 0) {
