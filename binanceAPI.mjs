@@ -37,7 +37,7 @@ export async function tweetTopPrice(dbConnection, twitter, binanceAPI, floor, in
 
       floor = await getFloor(dbConnection, floor);
       if (floor.TweetID == null) {
-        let status = await tweet(twitter, tweetMessage, initialFloor.TweetID);
+        let status = await tweet(twitter, message, initialFloor.TweetID);
         updateTweetFloor(dbConnection, floor.ID, status.id_str);
       }
     },

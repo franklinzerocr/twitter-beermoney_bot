@@ -9,6 +9,25 @@ function sleep(ms) {
   });
 }
 
+Number.prototype.noExponents = function () {
+  var data = String(this).split(/[eE]/);
+  if (data.length == 1) return data[0];
+
+  var z = '',
+    sign = this < 0 ? '-' : '',
+    str = data[0].replace('.', ''),
+    mag = Number(data[1]) + 1;
+
+  if (mag < 0) {
+    z = sign + '0.';
+    while (mag++) z += '0';
+    return z + str.replace(/^\-/, '');
+  }
+  mag -= str.length;
+  while (mag--) z += '0';
+  return str + z;
+};
+
 function satoshiToBTC(satoshi) {
   satoshi = satoshi / 100000000;
   satoshi = Number(satoshi.toFixed(8));
@@ -51,8 +70,8 @@ function satoshiToBTC(satoshi) {
       // ENTRY
       if (floor.Level == 0) {
         tweetMessage += '#TradingPlan' + floor.FK_Trading_Plan + ' START 🏁\n\n';
-        tweetMessage += floor.Asset + ' / #BTC\n';
-        tweetMessage += 'Entry Buy Price: ' + floor.Price + ' ' + floor.Pair + '\n\n';
+        tweetMessage += floor.Asset + ' / #' + floor.Pair + '\n';
+        tweetMessage += 'Entry Buy Price: ' + floor.Price + '\n\n';
         tweetMessage += '#AlgoTrade';
         status = await tweet(twitter, tweetMessage);
         updateTweetFloor(dbConnection, floor.ID, status.id_str, 1);
