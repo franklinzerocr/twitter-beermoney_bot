@@ -15,7 +15,7 @@ export async function binanceAPI(config) {
 export async function tweetTopPrice(dbConnection, twitter, binanceAPI, floor, initialFloor, tweet, updateTweetFloor) {
   let init = +new Date(initialFloor.DateTime) - 60000;
   await binanceAPI.candlesticks(
-    floor.Asset + 'BTC',
+    floor.Asset + floor.Pair,
     '1m',
     async function (error, ticks, symbol) {
       if (error) console.log('error', error.body);
