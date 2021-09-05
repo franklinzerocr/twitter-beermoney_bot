@@ -77,7 +77,7 @@ function satoshiToBTC(satoshi) {
         updateTweetFloor(dbConnection, floor.ID, status.id_str, 1);
 
         //EXIT
-      } else {
+      } else if (floor.Level == -4) {
         let initialFloor = await getInitialFloor(dbConnection, floor.FK_Trading_Plan);
         let binance = await binanceAPI(config.binance);
         await tweetTopPrice(dbConnection, twitter, binance, floor, initialFloor, tweet, updateTweetFloor);
