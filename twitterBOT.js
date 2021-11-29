@@ -50,11 +50,10 @@ function satoshiToBTC(satoshi) {
   let timerId = setTimeout(async function tick() {
     count++;
 
-    if (count >= 222222) {
-      tweetMessage = 'Follow the Telegram Channel 🍺 #trading #signals #AlgorithmicTrading \nhttps://t.me/BeermoneySignals';
+    if (count >= 333333) {
+      tweetMessage = 'You can write to me (@franklinzerocr) and request be a Beta Tester of the Bot 🍺 #AlgorithmicTrading \nhttps://t.me/BeermoneySignals';
       status = await tweet(twitter, tweetMessage);
-
-      count = 0;
+      process.exit();
     }
 
     floor = await getNewlyCreatedFloors(dbConnection);
@@ -76,11 +75,12 @@ function satoshiToBTC(satoshi) {
         status = await tweet(twitter, tweetMessage);
         updateTweetFloor(dbConnection, floor.ID, status.id_str, 1);
 
-        //EXIT
-      } else if (floor.Level == -4) {
+        //EXIT SCal
+      } else if (floor.Level == -4 || floor.Level == -5) {
         let initialFloor = await getInitialFloor(dbConnection, floor.FK_Trading_Plan);
         let binance = await binanceAPI(config.binance);
         await tweetTopPrice(dbConnection, twitter, binance, floor, initialFloor, tweet, updateTweetFloor);
+        //EXIT
       }
     }
 
