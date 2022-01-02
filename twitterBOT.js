@@ -51,7 +51,7 @@ function satoshiToBTC(satoshi) {
     count++;
 
     if (count >= 333333) {
-      tweetMessage = 'You can write to me (@franklinzerocr) and request be a Beta Tester of the Bot 🍺 #AlgorithmicTrading \nhttps://t.me/BeermoneySignals';
+      tweetMessage = '🍺 #AlgorithmicTrading \nhttps://t.me/BeermoneySignals';
       status = await tweet(twitter, tweetMessage);
       process.exit();
     }
@@ -75,11 +75,26 @@ function satoshiToBTC(satoshi) {
         status = await tweet(twitter, tweetMessage);
         updateTweetFloor(dbConnection, floor.ID, status.id_str, 1);
 
-        //EXIT SCal
+        //EXIT
       } else if (floor.Level == -4 || floor.Level == -5) {
         let initialFloor = await getInitialFloor(dbConnection, floor.FK_Trading_Plan);
+
+        let profitlosss = 'Profit: ' + floor.Profit + '% 😎🍺';
+        if (floor.Profit < 0) {
+          profitlosss = 'Loss: ' + floor.Profit + '% 😢💸';
+        }
+
+        // PROFIT/LOSS Message
+        tweetMessage += '#TradingPlan' + floor.FK_Trading_Plan + ' END\n\n';
+        tweetMessage += floor.Asset + ' / #' + floor.Pair + '\n';
+        tweetMessage += 'Exit Sell Price: ' + floor.Price + ' \n';
+        tweetMessage += profitlosss + ' \n';
+        tweetMessage += '#AlgoTrade';
+
+        if (floor.TweetID == null) status = await twitter.tweets.statusesUpdate({ status: tweetMessage, in_reply_to_status_id: initialFloor.TweetID });
+
         let binance = await binanceAPI(config.binance);
-        await tweetTopPrice(dbConnection, twitter, binance, floor, initialFloor, tweet, updateTweetFloor);
+        await tweetTopPrice(dbConnection, twitter, binance, floor, initialFloor, status.id_str, tweet, updateTweetFloor);
         //EXIT
       }
     }

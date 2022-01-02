@@ -12,11 +12,12 @@ export async function binanceAPI(config) {
   });
 }
 
-export async function tweetTopPrice(dbConnection, twitter, binanceAPI, floor, initialFloor, tweet, updateTweetFloor) {
+export async function tweetTopPrice(dbConnection, twitter, binanceAPI, floor, initialFloor, replyToID, tweet, updateTweetFloor) {
   let init = +new Date(initialFloor.DateTime) - 60000;
+  let timeFrame = '1h';
   await binanceAPI.candlesticks(
     floor.Asset + floor.Pair,
-    '1m',
+    timeFrame,
     async function (error, ticks, symbol) {
       if (error) console.log('error', error.body);
       let highestPrice = 0;
@@ -31,16 +32,16 @@ export async function tweetTopPrice(dbConnection, twitter, binanceAPI, floor, in
 
       let message = '#TradingPlan' + floor.FK_Trading_Plan + '\n';
       message += floor.Asset + ' / #' + floor.Pair + '\n';
-      message += 'Top Price: ' + highestPrice + '\n';
-      message += 'Profit so far: ' + profit + '% 😎🍺\n\n';
+      message += 'Top Price so far: ' + highestPrice + '\n';
+      message += 'Highest Profit so far: ' + profit + '% 😎🍺\n\n';
       message += '#AlgoTrade';
 
       floor = await getFloor(dbConnection, floor);
       if (floor.TweetID == null) {
-        let status = await tweet(twitter, message, initialFloor.TweetID);
+        let status = await tweet(twitter, message, replyToID);
         updateTweetFloor(dbConnection, floor.ID, status.id_str);
       }
     },
-    { startTime: init, endTime: +new Date() }
+    { limit: 500, startTime: init, endTime: +new Date() }
   );
 }
