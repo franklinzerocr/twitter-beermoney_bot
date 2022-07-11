@@ -51,8 +51,8 @@ function satoshiToBTC(satoshi) {
     count++;
 
     if (count >= 333333) {
-      tweetMessage = '🍺 #AlgorithmicTrading \nhttps://t.me/BeermoneySignals';
-      status = await tweet(twitter, tweetMessage);
+      // tweetMessage = '🍺 #AlgorithmicTrading \nhttps://beermoneybot.io';
+      // status = await tweet(twitter, tweetMessage);
       process.exit();
     }
 
@@ -88,8 +88,7 @@ function satoshiToBTC(satoshi) {
         tweetMessage += '#TradingPlan' + floor.FK_Trading_Plan + ' END\n\n';
         tweetMessage += floor.Asset + ' / #' + floor.Pair + '\n';
         tweetMessage += 'Exit Sell Price: ' + floor.Price + ' \n';
-        tweetMessage += profitlosss + ' \n';
-        tweetMessage += '#AlgoTrade';
+        tweetMessage += profitlosss;
 
         if (floor.TweetID == null) status = await twitter.tweets.statusesUpdate({ status: tweetMessage, in_reply_to_status_id: initialFloor.TweetID });
 
